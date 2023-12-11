@@ -1,20 +1,25 @@
 from pathlib import Path
-import re
 import setuptools
 
 setup_dir = Path(__file__).resolve().parent
 
-version = re.search( r'__version__ = "(.*)"', Path(setup_dir, 'waypaper/__main__.py').open().read())
-if version is None:
-    raise SystemExit("Could not determine version to use")
-version = version.group(1)
+long_description = ''
+
+try:
+    long_description = \
+        Path(setup_dir, 'README.md').open().read()
+except:
+    # In case we don't find README.md ignore it,
+    # e.g. when we update translations
+    pass
+
 setuptools.setup(
     name='waypaper',
     author='Roman Anufriev',
     author_email='anufriev.roman@protonmail.com',
     url='https://github.com/anufrievroman/waypaper',
     description='GUI wallpaper setter for Wayland',
-    long_description=Path(setup_dir, 'README.md').open().read(),
+    long_description=long_description,
     long_description_content_type='text/markdown',
     license='GPL',
     entry_points={
@@ -22,8 +27,8 @@ setuptools.setup(
             "waypaper = waypaper.__main__:run"
         ]
     },
-    install_requires=["PyGObject"],
-    version=version,
+    install_requires=["PyGObject", "importlib_metadata", "platformdirs"],
+    version='0.0.2',
     python_requires='>3.9',
     classifiers=[
         "Development Status :: 4 - Beta",
